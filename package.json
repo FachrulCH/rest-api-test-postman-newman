@@ -1,0 +1,23 @@
+{
+  "name": "json-server-dummy-employees",
+  "version": "0.0.1",
+  "description": "mocking employees server",
+  "main": "index.js",
+  "scripts": {
+    "mock:server": "json-server fakeData.js",
+    "test": "newman run ./tests/test.postman_collection.json --insecure --reporters='html,cli,junit' --reporter-html-template tests/newman-html-report-template-verbose.hbs --reporter-html-export newman/index.html --reporter-junit-export newman/junit.xml"
+  },
+  "keywords": [
+    "json-server",
+    "mockserver",
+    "postman"
+  ],
+  "author": "fachrulch",
+  "license": "ISC",
+  "dependencies": {
+    "faker": "^4.1.0",
+    "json-server": "^0.14.0",
+    "newman": "^3.9.4",
+    "wait-on": "^2.1.0"
+  }
+}

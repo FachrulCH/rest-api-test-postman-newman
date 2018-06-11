@@ -1,0 +1,706 @@
+{
+	"info": {
+		"_postman_id": "c597b8c5-8b18-4076-bb7f-7802015ef3b6",
+		"name": "jsonServer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "EmployeeSpec",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"description": "",
+					"item": [
+						{
+							"name": "GIVEN I have many employees",
+							"description": "",
+							"item": [
+								{
+									"name": "get list employees",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "1cb9a523-d57e-416e-a653-1db20aec1401",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Should return more than 10 actual = \"+jsonData.length, function () {",
+													"    // total data should greater than 10",
+													"    pm.expect(jsonData.length).to.gt(10);",
+													"});",
+													"",
+													"// save total employees",
+													"pm.globals.set(\"fch_totalEmployees\", jsonData.length);"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "WHEN I add an employee",
+							"description": "",
+							"item": [
+								{
+									"name": "post new employees",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "59ca9f55-9881-4ddc-a451-b87ee8e0903e",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is Created\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Data should saved\", function () {",
+													"    pm.expect(jsonData.first_name).to.eql(\"Rasuna\");",
+													"    pm.expect(jsonData.email).to.eql(\"rasuna@fachrul.net\");",
+													"});",
+													"",
+													"pm.test(\"Should return generated ID\", function () {",
+													"    pm.expect(pm.response.text()).to.include(\"\\\"id\\\":\");",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": " {\n    \"first_name\": \"Rasuna\",\n    \"last_name\": \"Said\",\n    \"email\": \"rasuna@fachrul.net\"\n}"
+										},
+										"url": {
+											"raw": "localhost:3000/employees",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "THEN list employees increased",
+							"description": "",
+							"item": [
+								{
+									"name": "get list employees to compare",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "6ebb0cab-8f9a-4444-bf30-29c36f456e48",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"var lastEmployeeCount = pm.globals.get(\"fch_totalEmployees\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Total employees should increased :: \"+jsonData.length+\" > \"+lastEmployeeCount, function () {",
+													"    // total data should greater than 10",
+													"    pm.expect(jsonData.length).to.gt(lastEmployeeCount);",
+													"});",
+													"",
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Update",
+					"description": "",
+					"item": [
+						{
+							"name": "GIVEN I get employee for update",
+							"description": null,
+							"item": [
+								{
+									"name": "get detail employees for update",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2a797ca9-3edd-4cca-88a4-ac2b8b180b52",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.globals.set(\"fch_employeeData\", JSON.stringify(jsonData));"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees/1",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "WHEN I update emplyee information",
+							"description": "",
+							"item": [
+								{
+									"name": "update employees",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "3cb03cae-91af-49ce-8416-7e50090dce53",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"var oldData = JSON.parse(pm.globals.get(\"fch_employeeData\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"ID should not change\", function () {",
+													"    pm.expect(jsonData.id).to.eql(oldData.id);",
+													"});",
+													"",
+													"// simple check",
+													"pm.test(\"Name should change\", function () {",
+													"    pm.expect(jsonData.first_name).to.not.eql(oldData.first_name);",
+													"    pm.expect(jsonData.last_name).to.not.eql(oldData.last_name);",
+													"});",
+													"",
+													"// or compare hardcoded value from body",
+													"pm.test(\"Email should change\", function () {",
+													"    pm.expect(jsonData.email).to.eql(\"sudirmant@alul.com\");",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": " {\n    \"first_name\": \"Sudirman\",\n    \"last_name\": \"Thamrin\",\n    \"email\": \"sudirmant@alul.com\"\n}"
+										},
+										"url": {
+											"raw": "localhost:3000/employees/1",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "THEN employee information changed",
+							"description": "",
+							"item": [
+								{
+									"name": "get detail employees for update Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "7a20be8b-933e-48be-af9d-1f2caab86aac",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"var oldData = JSON.parse(pm.globals.get(\"fch_employeeData\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"ID should not change\", function () {",
+													"    pm.expect(jsonData.id).to.eql(oldData.id);",
+													"});",
+													"",
+													"// simple check",
+													"pm.test(\"Name should change\", function () {",
+													"    pm.expect(jsonData.first_name).to.not.eql(oldData.first_name);",
+													"    pm.expect(jsonData.last_name).to.not.eql(oldData.last_name);",
+													"});",
+													"",
+													"// or compare hardcoded value from body",
+													"pm.test(\"Email should change\", function () {",
+													"    pm.expect(jsonData.email).to.eql(\"sudirmant@alul.com\");",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees/1",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get search employees",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "4640ecaf-6abe-4434-8c8a-be621eb8b325",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"",
+													"",
+													"pm.test(\"Data found\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData[0].id).to.eql(1);",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees?q=sudirman",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees"
+											],
+											"query": [
+												{
+													"key": "q",
+													"value": "sudirman"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Delete",
+					"description": "",
+					"item": [
+						{
+							"name": "GIVEN I get employee for delete",
+							"description": null,
+							"item": [
+								{
+									"name": "get detail employees for delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0606c0ef-03db-429e-9ba1-f828c3042534",
+												"type": "text/javascript",
+												"exec": [
+													"// mari menggunakan library yg sudah build in dalam postman",
+													"// untuk memilih random employee id",
+													"",
+													"var jsonData = pm.response.json();",
+													"var target = _.sample(jsonData);",
+													"",
+													"pm.globals.set(\"fch_employeeToDelete\", target.id);",
+													"",
+													"pm.test(\"Status code is 200 \", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "WHEN I terminate an employee",
+							"description": "",
+							"item": [
+								{
+									"name": "delete employee",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost:3000/employees/10",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "THEN total employees will reduced",
+							"description": "",
+							"item": [
+								{
+									"name": "get detail employees",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0c55a7f6-4923-4a48-a81c-88ff25322822",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Status code is Not Found\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {},
+										"url": {
+											"raw": "localhost:3000/employees{{fch_employeeToDelete}}",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"employees{{fch_employeeToDelete}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "JobTitleSpec",
+			"description": "",
+			"item": [
+				{
+					"name": "get list job_titles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/job_titles",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get search  job_titles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/job_titles?q=engineer",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "engineer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post new  job_titles",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Tukang Gorengan\",\n    \"description\": \"Bring happiness to everyone\",\n    \"type\": \"Maknyus\",\n    \"area\": \"Food\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/job_titles",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update job title",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Tukang Nasi goreng\",\n    \"description\": \"I'm lovin it\",\n    \"type\": \"Maknyus\",\n    \"area\": \"Food\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/job_titles/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete job_titles",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/job_titles/10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get detail job_titles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/job_titles/10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"job_titles",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ebf00e29-c6af-4e47-a2b7-818cfff6425e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3ce9d345-80ce-4621-9028-9bfc42e45e45",
+				"type": "text/javascript",
+				"exec": [
+					"// implement to all descendant test",
+					"pm.test(\"Should response less than 0.5 second. actual = \"+pm.response.responseTime, function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(500);",
+					"});"
+				]
+			}
+		}
+	]
+}
