@@ -4,10 +4,12 @@
   "description": "mocking employees server",
   "main": "index.js",
   "scripts": {
-    "mock:server": "json-server fakeData.js",
-    "test": "newman run ./tests/test.postman_collection.json --insecure --reporters='html,cli,junit' --reporter-html-template tests/newman-html-report-template-verbose.hbs --reporter-html-export newman/index.html --reporter-junit-export newman/junit.xml"
+    "ci": "npm run start-server & npm run test",
+    "start-server": "json-server fakeData.js",
+    "test": "wait-on http://localhost:3000 && newman run ./tests/test.postman_collection.json --insecure --reporters='html,cli,junit' --reporter-html-template tests/newman-html-report-template-verbose.hbs --reporter-html-export newman/index.html --reporter-junit-export newman/junit.xml && sudo kill $(sudo lsof -t -i:3000)"
   },
   "keywords": [
+    "REST api test",
     "json-server",
     "mockserver",
     "postman"
